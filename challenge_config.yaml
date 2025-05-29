@@ -1,164 +1,99 @@
-# If you are not sure what all these fields mean, please refer our documentation here:
-# https://evalai.readthedocs.io/en/latest/configuration.html
-title: Random Number Generator Challenge
-short_description: Random number generation challenge for each submission
-description: templates/description.html
-evaluation_details: templates/evaluation_details.html
-terms_and_conditions: templates/terms_and_conditions.html
-image: logo.jpg
-submission_guidelines: templates/submission_guidelines.html
-leaderboard_description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras egestas a libero nec sagittis.
-evaluation_script: evaluation_script.zip
-remote_evaluation: False
-start_date: 2019-01-01 00:00:00
-end_date: 2099-05-31 23:59:59
-published: True
-tags: 
-  - random-number-generation
-  - machine-learning
-  - data-science
-  - computer-vision
-leaderboard:
-  - id: 1
-    schema:
-      {
-        "labels": ["Metric1", "Metric2", "Metric3", "Total"],
-        "default_order_by": "Total",
-        "metadata": {
-          "Metric1": {
-            "sort_ascending": True,
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          },
-          "Metric2": {
-            "sort_ascending": True,
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          }
-        }
-      }
+title: "Long Analogy Evaluation Challenge" # Or your preferred title
+short_description: "An automated evaluation of computer science analogies and their video animations." # Max 140 chars
+description: "templates/description.html" # Main challenge description
+evaluation_details: "templates/evaluation_details.html" # How submissions are evaluated
+terms_and_conditions: "templates/terms_and_conditions.html"
+image: "logo.jpg" # Path to your challenge logo (e.g., images/logo.jpg if you move it)
+submission_guidelines: "templates/submission_guidelines.html"
 
+evaluation_script: "evaluation_script/" # Points to the folder containing main.py
+
+remote_evaluation: False # Set to True if evaluation runs on a separate remote server
+is_docker_based: False # Set to True if your evaluation script requires a Docker environment
+
+# is_static_dataset_code_upload: False # Set to True if participants upload code to run on a static dataset provided by you
+
+start_date: "2025-07-01 00:00:00" # 🗓️ Replace with your actual start date (UTC)
+end_date: "2025-12-31 23:59:59"   # 🗓️ Replace with your actual end date (UTC)
+published: False # Set to True when you are ready for the challenge to be visible after admin approval
+
+# Optional: Restrict participation by email domain
+# allowed_email_domains: ["example.edu"]
+# blocked_emails_domains: ["spam.com"]
+
+# Define the leaderboards for your challenge phases
+leaderboard:
+  - id: 1 # Unique ID for the text-only leaderboard
+    schema:
+      labels: ["Target Concept Coverage", "Mapping Strength", "Metaphoricity", "Overall Score Text"] # Metrics to display
+      default_order_by: "Overall Score Text" # Metric used for default sorting
+      metadata:
+        "Target Concept Coverage":
+          sort_ascending: False # Higher is better
+          description: "How well the analogy covers the topics in the description."
+        "Mapping Strength":
+          sort_ascending: False # Higher is better
+          description: "The logical soundness and consistency of the correspondence between source and target concepts."
+        "Metaphoricity":
+          sort_ascending: False # Assuming 'High' metaphoricity (greater conceptual distance) gets a higher score and is considered better for ranking. Adjust if interpretation differs.
+          description: "Conceptual distance between the source and the target concept."
+        "Overall Score Text": # You'll need to define how this is calculated in your evaluation script
+          sort_ascending: False # Higher is better
+          description: "Combined score for the text-only analogy evaluation."
+
+  - id: 2 # Unique ID for the text+video leaderboard
+    schema:
+      labels: ["Target Concept Coverage", "Mapping Strength", "Metaphoricity", "Alignment with Text", "Visual Clarity", "Visual Engagement", "Overall Score Video"]
+      default_order_by: "Overall Score Video"
+      metadata:
+        "Target Concept Coverage":
+          sort_ascending: False
+          description: "How well the analogy covers the topics in the description."
+        "Mapping Strength":
+          sort_ascending: False
+          description: "The logical soundness and consistency of the correspondence between source and target concepts."
+        "Metaphoricity":
+          sort_ascending: False # Assuming higher is better
+          description: "Conceptual distance between the source and the target concept."
+        "Alignment with Text":
+          sort_ascending: False # Higher is better (e.g., Excellent > Good > Fair > Poor)
+          description: "How completely and accurately the animation covers the content of the analogy text."
+        "Visual Clarity":
+          sort_ascending: False # Higher is better
+          description: "How clearly and accurately the visual elements represent the scene described in the analogy."
+        "Visual Engagement":
+          sort_ascending: False # Higher is better
+          description: "Rates how effectively the animation holds the viewer’s attention."
+        "Overall Score Video": # You'll need to define how this is calculated
+          sort_ascending: False
+          description: "Combined score for the text and video analogy evaluation."
+
+# Define the challenge phases (your two separate sections)
 challenge_phases:
-  - id: 1
-    name: Dev Phase
-    description: templates/challenge_phase_1_description.html
-    leaderboard_public: False
-    is_public: True
-    challenge: 1
-    is_active: True
-    max_concurrent_submissions_allowed: 3
-    allowed_email_ids: []
-    disable_logs: False
-    is_submission_public: True
-    start_date: 2019-01-19 00:00:00
-    end_date: 2099-04-25 23:59:59
-    test_annotation_file: annotations/test_annotations_devsplit.json
-    codename: dev
-    max_submissions_per_day: 5
-    max_submissions_per_month: 50
-    max_submissions: 50
-    default_submission_meta_attributes:
-      - name: method_name
-        is_visible: True
-      - name: method_description
-        is_visible: True
-      - name: project_url
-        is_visible: True
-      - name: publication_url
-        is_visible: True
-    submission_meta_attributes:
-      - name: TextAttribute
-        description: Sample
-        type: text
-        required: False
-      - name: SingleOptionAttribute
-        description: Sample
-        type: radio
-        options: ["A", "B", "C"]
-      - name: MultipleChoiceAttribute
-        description: Sample
-        type: checkbox
-        options: ["alpha", "beta", "gamma"]
-      - name: TrueFalseField
-        description: Sample
-        type: boolean
-        required: True
-    is_restricted_to_select_one_submission: False
-    is_partial_submission_evaluation_enabled: False
-    allowed_submission_file_types: ".json, .zip, .txt, .tsv, .gz, .csv, .h5, .npy, .npz"
-  - id: 2
-    name: Test Phase
-    description: templates/challenge_phase_2_description.html
+  - id: 1 # Unique ID for this phase
+    name: "Phase 1: Text-only Analogy Evaluation"
+    description: "templates/challenge_phase_1_description.html" # You have this HTML file
+    leaderboard_public: True # Make leaderboard visible
+    is_public: True # Make phase visible
+    start_date: "2025-07-01 00:00:00" # 🗓️ Phase start date (UTC)
+    end_date: "2025-12-31 23:59:59"   # 🗓️ Phase end date (UTC)
+    max_submissions_per_day: 5 # Example: limits per participant
+    max_submissions_per_month: 50 # Example
+    max_submissions: 100 # Example: total limit per participant for this phase
+    codename: "text_only_evaluation" # A unique string identifier for this phase. Used by the eval script.
+    leaderboard_id: 1 # Links this phase to the leaderboard with id 1
+    test_annotation_file: "annotations/test_annotations_devsplit.json" # Annotation file for this phase
+
+  - id: 2 # Unique ID for this phase
+    name: "Phase 2: Text and Video Analogy Evaluation"
+    description: "templates/challenge_phase_2_description.html" # You have this HTML file
     leaderboard_public: True
     is_public: True
-    challenge: 2
-    is_active: True
-    max_concurrent_submissions_allowed: 3
-    allowed_email_ids: []
-    disable_logs: False
-    is_submission_public: True
-    start_date: 2019-01-01 00:00:00
-    end_date: 2099-05-24 23:59:59
-    test_annotation_file: annotations/test_annotations_testsplit.json
-    codename: test
+    start_date: "2025-07-01 00:00:00" # 🗓️ Phase start date (UTC)
+    end_date: "2025-12-31 23:59:59"   # 🗓️ Phase end date (UTC)
     max_submissions_per_day: 5
     max_submissions_per_month: 50
-    max_submissions: 50
-    default_submission_meta_attributes:
-      - name: method_name
-        is_visible: True
-      - name: method_description
-        is_visible: True
-      - name: project_url
-        is_visible: True
-      - name: publication_url
-        is_visible: True
-    submission_meta_attributes:
-      - name: TextAttribute
-        description: Sample
-        type: text
-      - name: SingleOptionAttribute
-        description: Sample
-        type: radio
-        options: ["A", "B", "C"]
-      - name: MultipleChoiceAttribute
-        description: Sample
-        type: checkbox
-        options: ["alpha", "beta", "gamma"]
-      - name: TrueFalseField
-        description: Sample
-        type: boolean
-    is_restricted_to_select_one_submission: False
-    is_partial_submission_evaluation_enabled: False
-
-dataset_splits:
-  - id: 1
-    name: Train Split
-    codename: train_split
-  - id: 2
-    name: Test Split
-    codename: test_split
-
-challenge_phase_splits:
-  - challenge_phase_id: 1
-    leaderboard_id: 1
-    dataset_split_id: 1
-    visibility: 1
-    leaderboard_decimal_precision: 2
-    is_leaderboard_order_descending: True
-    show_execution_time: True
-    show_leaderboard_by_latest_submission: True
-  - challenge_phase_id: 2
-    leaderboard_id: 1
-    dataset_split_id: 1
-    visibility: 3
-    leaderboard_decimal_precision: 2
-    is_leaderboard_order_descending: True
-    showeceution_time: False
-    show_leaderboard_by_latest_submission: False
-  - challenge_phase_id: 2
-    leaderboard_id: 1
-    dataset_split_id: 2
-    visibility: 1
-    leaderboard_decimal_precision: 2
-    is_leaderboard_order_descending: True
-    show_execution_time: True
-    show_leaderboard_by_latest_submission: True
+    max_submissions: 100
+    codename: "text_video_evaluation" # Unique string identifier
+    leaderboard_id: 2 # Links this phase to the leaderboard with id 2
+    test_annotation_file: "annotations/test_annotations_testsplit.json" # Annotation file for this phase
